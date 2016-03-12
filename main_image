@@ -1,0 +1,5 @@
+#xrdp remote connection
+sudo apt-get install xrdp
+
+#Git Core
+sudo apt-get install git-core
