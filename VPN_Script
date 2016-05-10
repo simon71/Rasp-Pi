@@ -163,4 +163,6 @@ chmod 777 /etc/openvpn/easy-rsa
 chmod 777 /etc/openvpn/easy-rsa/keys
 chmod 777 /etc/openvpn/easy-rsa/keys/simon.ovpn
 chmod 600 /etc/openvpn
-chmod 600 /etc/openvpn
+chmod 600 /etc/openvpn/easy-rsa
+chmod 600 /etc/openvpn/easy-rsa/keys
+chmod 600 /etc/openvpn/easy-rsa/keys/simon.ovpn
