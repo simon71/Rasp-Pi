@@ -1,9 +1,0 @@
-#xrdp remote connection
-sudo apt-get install xrdp
-
-#Git Core
-sudo apt-get install git-core
-
-#View Git log files
-git log --graph --decorate --pretty=oneline --abbrev-commit
-

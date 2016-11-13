@@ -1,8 +1,0 @@
-#check free space on file system
-df -Bm
-
-#to return with data volumn
-df -h
-
-#to seach for file directories using lots of space
-sudo du -xh / | grep -P "G\t"
