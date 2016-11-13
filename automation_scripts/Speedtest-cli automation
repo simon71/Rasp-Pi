@@ -1,0 +1,14 @@
+
+#!/bin/bash
+
+# declare the NOW varaiable 
+NOW=$(date +"%d-%m-%y %T")
+
+# Adds the date to each entry
+echo "Date: $NOW" >> ~/simon/speedtest.log 
+
+#Runs the speedtest.cli package and logs the results into speedtest.log
+speedtest-cli --simple >> ~/simon/speedtest.log
+
+#Adds a blank line between each entry
+echo "" >> ~/simon/speedtest.log

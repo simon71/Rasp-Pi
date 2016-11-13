@@ -1,0 +1,50 @@
+/ * Init * /
+
+body {
+	background-color: black;;
+	font-family: Verdana;
+	font-weight: normal;
+	padding: 0px;
+	margin: 0px;
+	overflow: hidden;
+}
+
+div#MainTitle
+{
+	font-family: Times;
+	font-size: 30px;
+	font-weight: bold;
+	padding-left: 100px;
+}
+div#t1
+{
+	width: 1366px;
+	height: 100px;
+	position: relative;
+	overflow: hidden;
+	color: darkgray;
+	padding: 10px;
+}
+div#main
+{
+	width: 1366px;
+	height: 600px;
+	position: relative;
+	overflow: hidden;
+	background-color: black;
+	color: #FFF;
+	border-color: darkgray;
+	border-width: 2px;
+}
+div#dashboard
+{
+	width:1000px;
+	position: fixed;
+}
+div#weather
+{
+	position: relative;
+	right: 10px;
+	top: 20px;
+	width: 315px;
+}
