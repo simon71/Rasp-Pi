@@ -12,8 +12,21 @@ urlb ="?day="
 url = urla+t+urlb+"0"
 page = urllib.request.urlopen(url)
 soup = BeautifulSoup(page, "html5lib")
-rise_set = soup.find('div', attrs={'class':'sunrise-sunset'})
-sunrise = rise_set.find('span', attrs={'class':'sunrise'}).text
-sunset = rise_set.find('span', attrs={'class':'sunset'}).text
 
-print(sunrise, sunset)
+#sun rise and sunset
+# rise_set = soup.find('div', attrs={'class':'sunrise-sunset'})
+# sunrise = rise_set.find('span', attrs={'class':'sunrise'}).text
+# sunset = rise_set.find('span', attrs={'class':'sunset'}).text
+
+#last updated
+# a = soup.find('div', attrs={'class':'detail-container group'})
+# last_update = a.p.text
+
+#table time
+a=soup.find('tr', attrs={'class':'time'})
+b=a.findAll('th', attrs={'class':'value hours-1'})
+for c in b:
+    d = c.find('span', attrs={'class':'hour'}).text
+    print(d)
+#hr = b.find('span', attrs={'class':'hour'})
+#print(b)
