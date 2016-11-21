@@ -22,11 +22,17 @@ soup = BeautifulSoup(page, "html5lib")
 # a = soup.find('div', attrs={'class':'detail-container group'})
 # last_update = a.p.text
 
-#table time
-a=soup.find('tr', attrs={'class':'time'})
-b=a.findAll('th', attrs={'class':'value hours-1'})
-for c in b:
-    d = c.find('span', attrs={'class':'hour'}).text
-    print(d)
-#hr = b.find('span', attrs={'class':'hour'})
-#print(b)
+tr = soup.find('table')
+tr_bdy = tr.find('tbody')
+
+print(url)
+
+
+
+# a=soup.find('tr', attrs={'class':'time'})
+# b=a.findAll('th', attrs={'class':'value hours-1'})
+# for c in b:
+#     d = c.find('span', attrs={'class':'hour'}).text
+#     print(d)
+# hr = b.find('span', attrs={'class':'hour'})
+# print(b)
