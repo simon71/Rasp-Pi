@@ -35,31 +35,26 @@ if [ ! -f $log ];then
     sudo chown -R $usr:$usr /home/$usr/log
 fi
 
-#set location of packages file 
+#set location of packages file
 file="/home/$usr/packages.txt"
 
+# check that the packages file isnt empty
 if [ -s $file ];then
-    
+
     exec 4<$file
-    
+
     while read -u4 p ; do
 
             pkg=$p
-            
+
             # check to see if package is already installed
-            pkg_check(){
-                dpkg-query -W -f='${Status}\n' $pkg
-            }
+            pkg_check(){ dpkg-query -W -f='${Status}\n' $pkg }
 
             # run package install
-            pkg_install(){
-               sudo apt-get -y install $pkg
-            }   
-            
+            pkg_install(){ sudo apt-get -y install $pkg }
+
             # search cache for package
-            pkg_search(){
-                sudo apt-cache search $pkg
-            }
+            pkg_search(){ sudo apt-cache search $pkg }
 
             # log file for install output
             log="/home/$usr/log/start_up_log.txt"
@@ -77,32 +72,26 @@ if [ -s $file ];then
             em3="$pkg installed sucessfully"
             em4="There is no package named $pkg./nPlease check the spelling in $file."
             em5="$pkg was not installed sucessfully./n This is due to a problem with the package name./n Please check $file for a list of avaiable packages that match that name."
-            
+
             ##RUN##
 
             # first check to see if the package is already installed
             pkg_status=$(pkg_check $pkg)
-            
-            #if already installed
-            if [ "$pkg_status" == "$ms1" ]; then 
-                echo "$em2" | tee $log
-            
-            # if not already installed 
-            elif [ "$pkg_status" == "$ms2" ]; then
-                
-                # run apt-get install
-                eval $pkg_install
 
-                # check to see if install was sucessful
+            #if already installed
+            if [ "$pkg_status" == "$ms1" ]; then
+                echo "$em2" | tee $log
+            else
+                eval $pkg_install # run apt-get install
+
+                # once run check to see if install was sucessful
                 p_s=$(pkg_check $pkg)
 
                 # if sucessfull
                 if [ "$p_s" == "$ms1" ]; then
                     echo "$em3" | tee $log
-                else
-                    #search the cache for the package name
+                else #search the cache for the package name
                     pk_s=$(pkg_search $pkg)
-
                     if [ "$pk_s" == "" ]; then
                         echo "$em4" | tee $log
                     else
@@ -110,13 +99,12 @@ if [ -s $file ];then
                     fi
                 fi
             fi
-            
-    
+
+
     done<$file
-   
-    echo install complete
-    
+    echo "install complete"
     exit
+# if packages file is empty
 else
-    echo "$file is empty./n Please goto $file and list all pakages to be installed."
+    echo "$file is empty./n Please go to $file and add packages to be installed."
 fi
