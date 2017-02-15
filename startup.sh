@@ -190,8 +190,10 @@ as=/etc/xdg/lxsession/LXDE/autostart
 
 if [ -e $as ]; then
     echo @xset s off >> $as
-    echo @xset -dpms
-    echo @xset s noblank
-    echo @iceweasel --https://www.hostedgraphite.com/c92bc7a5/6dfbfade-8ed2-4e92-8a3e-e39de351f570/grafana/dashboard/db/vertica-db-metrics
-    echo @iceweasel --https://www.hostedgraphite.com/c92bc7a5/6dfbfade-8ed2-4e92-8a3e-e39de351f570/grafana/dashboard/db/jenkins4-metrics
-    echo @xdotools key F11
+    echo @xset -dpms >> $as
+    echo @xset s noblank >> $as
+    echo @sh /home/$USER/start.sh
+else
+    echo "lxsession hasn't installed properly. So the autostart file cant be updated"
+fi
+
