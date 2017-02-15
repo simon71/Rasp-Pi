@@ -192,4 +192,6 @@ if [ -e $as ]; then
     echo @xset s off >> $as
     echo @xset -dpms
     echo @xset s noblank
-    echo @iceweasel --
+    echo @iceweasel --https://www.hostedgraphite.com/c92bc7a5/6dfbfade-8ed2-4e92-8a3e-e39de351f570/grafana/dashboard/db/vertica-db-metrics
+    echo @iceweasel --https://www.hostedgraphite.com/c92bc7a5/6dfbfade-8ed2-4e92-8a3e-e39de351f570/grafana/dashboard/db/jenkins4-metrics
+    echo @xdotools key F11
