@@ -1,34 +1,40 @@
 #! /bin/bash
 
-sudo apt-get -y update
-sleep 2
-echo ""
-echo ""
+sleep_wait() {
+  sleep 2
+  echo ""
+}
+
+sleep_wait
 echo "Now updating"
-echo ""
-sleep 2
-sudo apt-get -y update
-sleep 2
-echo ""
-echo ""
-echo "Update complete"
-echo ""
-echo ""
-sleep 2
-echo "Now cleaning system"
-echo ""
-echo ""
-sleep 2
+sudo apt-get -y upgrade
+sleep_wait
+echo "Update complete now upgrading"
+sleep_wait
+sudo apt-get -y upgrade
+sleep_wait
+echo "Upgrade has finished"
+echo "Now running clean up and checking free disk space before updating distro"
+sleep_wait
 sudo apt-get clean
-sleep 2
-echo ""
-echo "Clean up complete"
-echo ""
-sleep 2
+df -h
+sudo apt-get dist-upgrade --simulate
+read -p "Is there enough room? (Y/N)" confirm
+if [[ $confirm == [yY] || $confirm == [Yy][Es][Ss] ]]; then
+  echo "Updating Distro";
+  sleep_wait;
+  sudo apt-get dist-upgrade -y;
+  sleep_wait
+  echo "Now running the final cleanup"
+  sudo apt-get autoclean
+fi
+sleep_wait
+echo "Update complete"
+sleep_wait
 clear
 
 #create log dir if not present
-if [ ! -f $log ];then
+if [ ! -f "$log" ];then
     sudo mkdir /home/$usr/log
     sudo chown -R $usr:$usr /home/$usr/log
 fi
@@ -36,7 +42,7 @@ fi
 # randomly generate password
 passwd=< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-12}
 
-# echo passwd to terminal to be copied by uer
+# echo passwd to terminal to be copied by user
 echo $password
 
 pwm="Press space bar once you've copied the password.
@@ -74,25 +80,25 @@ ssh=$(ssh_test running)
 sshm="ssh is inastalled and running."
 
 if [ "$ssh" != "" ]; then 
-    echo "$sshm" | tee $log
-    $ssh >> $log
+    echo "$sshm" | tee "$log"
+    $ssh >> "$log"
 else
     eval $ssh_install
     eval 
-    if  ["$ssh" != "" ]; then
-        echo "$shsm" | tee $log
-        $ssh >> $log
+    if  [ "$ssh" != "" ]; then
+        echo "$shsm" | tee "$log"
+        $ssh >> "$log"
     else
-        echo "ssh has failed to install" | tee $log
+        echo "ssh has failed to install" | tee "$log"
     fi
 fi
 
 # set user
 usr="$USER"
 
-
+current_dir="$PWD"
 #set location of packages file
-file="/home/$usr/packages.txt"
+file="$current_dir/packages.txt"
 
 # check that the packages file isnt empty
 if [ -s $file ];then
@@ -142,38 +148,38 @@ if [ -s $file ];then
 
         pkg_check(){
             {
-                dpkg-query -W -f='${Status}\n' $pkg
+                dpkg-query -W -f='${Status}\n' "$pkg"
             } &> /dev/null
         }
 
         {
-        pkg_status=$(pkg_check $pkg)
+        pkg_status=$(pkg_check "$pkg")
         } &> /dev/null
             #if already installed
             if [ "$pkg_status" == "$ms1" ]; then
-                echo "$em2" | tee $log
-                echo "$emb" | tee $log
+                echo "$em2" | tee "$log"
+                echo "$emb" | tee "$log"
             else
-                eval $pkg_install # run apt-get install
+                eval "$pkg_install" # run apt-get install
 
                 # once run check to see if install was sucessful
-                p_s=$(pkg_check $pkg)
+                p_s=$(pkg_check "$pkg")
 
                 # if sucessfull
                 if [ "$p_s" == "$ms1" ]; then
-                    echo "$em3" | tee $log
-                    echo "$emb" | tee $log
+                    echo "$em3" | tee "$log"
+                    echo "$emb" | tee "$log"
                else #search the cache for the package name
-                    pk_s=$(pkg_search $pkg)
+                    pk_s=$(pkg_search "$pkg")
                     if [ "$pk_s" == "" ]; then
-                        echo "$em4" | tee $log
-                        echo "$em4a" | tee $log
-                        echo "$emb" | tee $log
+                        echo "$em4" | tee "$log"
+                        echo "$em4a" | tee "$log"
+                        echo "$emb" | tee "$log"
                     else
-                        echo "$em5" | tee $log
-                        echo "$em5a" | tee $log
-                        echo "$em5b" | tee $log
-                        echo "$emb" | tee $log
+                        echo "$em5" | tee "$log"
+                        echo "$em5a" | tee "$log"
+                        echo "$em5b" | tee "$log"
+                        echo "$emb" | tee "$log"
                     fi
                 fi
             fi
@@ -183,17 +189,5 @@ if [ -s $file ];then
 # if packages file is empty
 else
     echo "$file is empty.\n Please go to $file and add packages to be installed."
-fi
-
-# check if LXDE autostart has inatlled
-as=/etc/xdg/lxsession/LXDE/autostart
-
-if [ -e $as ]; then
-    echo @xset s off >> $as
-    echo @xset -dpms >> $as
-    echo @xset s noblank >> $as
-    echo @sh /home/$USER/start.sh
-else
-    echo "lxsession hasn't installed properly. So the autostart file cant be updated"
 fi
 
