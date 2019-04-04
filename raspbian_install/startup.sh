@@ -1,43 +1,64 @@
-#! /bin/bash
+#!/bin/bash
 
 sleep_wait() {
-  sleep 2
-  echo ""
+	echo ""
+	sleep 2
+	echo ""
 }
 
 sleep_wait
 echo "Now updating"
-sudo apt-get -y upgrade
+echo ""
+apt-get -y upgrade
 sleep_wait
 echo "Update complete now upgrading"
 sleep_wait
-sudo apt-get -y upgrade
+apt-get -y upgrade
 sleep_wait
 echo "Upgrade has finished"
+sleep_wait
 echo "Now running clean up and checking free disk space before updating distro"
 sleep_wait
-sudo apt-get clean
+apt-get clean
 df -h
-sudo apt-get dist-upgrade --simulate
-read -p "Is there enough room? (Y/N)" confirm
-if [[ $confirm == [yY] || $confirm == [Yy][Es][Ss] ]]; then
-  echo "Updating Distro";
-  sleep_wait;
-  sudo apt-get dist-upgrade -y;
-  sleep_wait
-  echo "Now running the final cleanup"
-  sudo apt-get autoclean
+sleep_wait
+apt-get dist-upgrade --simulate
+read -p "Is there enough room? (y/n)" confirm
+if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
+		sleep_wait
+		echo "Updating Distro";
+		sleep_wait;
+		apt-get dist-upgrade -y;
+		sleep_wait
+		echo "Now running the final cleanup"
+		apt-get autoclean
+else
+		sleep_wait
+		echo "Maybe later then!!"  
 fi
 sleep_wait
 echo "Update complete"
-sleep_wait
+# Clear the screen
 clear
 
 #create log dir if not present
-if [ ! -f "$log" ];then
-    sudo mkdir /home/$usr/log
-    sudo chown -R $usr:$usr /home/$usr/log
+if [ ! -f "$log" ]; then
+		sudo mkdir /home/$usr/log
+		sudo chown -R $usr:$usr /home/$usr/log
 fi
+
+# create new users account
+read -p "Do you want create a new user account? (y/n)" user_add
+
+if [[ "$new_user" == "y" ]]; then
+		# create new user account
+		echo "Creating account for $new_user";
+		adduser $new_user;
+		# add new user to sudoers
+		echo "Adding $new_user to sudoers.";
+		adduser $new_user sudo;
+else
+		echo
 
 # randomly generate password
 passwd=< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-12}
